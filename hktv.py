@@ -1,0 +1,143 @@
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.action_chains import ActionChains as actions
+from selenium.webdriver.common.keys import Keys as keys
+from selenium.webdriver.support.ui import Select as WebDriverSelect
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.support import expected_conditions as EC
+import time
+import os
+import pandas as pd
+
+options = Options()
+# options.add_argument("--headless")
+driver = webdriver.Chrome(options=options)
+
+urls = [
+        "https://www.hktvmall.com/hktv/zh/search?page=0&q=%3Asales-volume-desc%3Acategory%3AAA28050000000%3Azone%3Amothernbaby%3Astreet%3Amain%3A",
+        "https://www.hktvmall.com/hktv/zh/search?page=0&q=%3Asales-volume-desc%3Acategory%3AAA28100000000%3Azone%3Amothernbaby%3Astreet%3Amain%3A",
+        "https://www.hktvmall.com/hktv/zh/search?page=0&q=%3Asales-volume-desc%3Acategory%3AAA28371500000%3Azone%3Amothernbaby%3Astreet%3Amain%3A",
+        "https://www.hktvmall.com/hktv/zh/search?page=0&q=%3Asales-volume-desc%3Acategory%3AAA28470500000%3Azone%3Amothernbaby%3Astreet%3Amain%3A",
+        "https://www.hktvmall.com/hktv/zh/search?page=0&q=%3Asales-volume-desc%3Acategory%3AAA28321000000%3Azone%3Amothernbaby%3Astreet%3Amain%3A",
+        "https://www.hktvmall.com/hktv/zh/%E6%AF%8D%E5%AC%B0%E8%82%B2%E5%85%92/%E5%AC%B0%E5%85%92%E5%A4%96%E5%87%BA%E7%94%A8%E5%93%81/%E6%8F%B9%E5%B8%B6-%E6%8F%B9%E5%B7%BE-%E6%8F%B9%E5%B8%B6%E5%8F%A3%E6%B0%B4%E5%A2%8A/main/search?page=0&q=%3Asales-volume-desc%3Acategory%3AAA28472005001%3Azone%3Amothernbaby%3Astreet%3Amain%3A",
+        "https://www.hktvmall.com/hktv/zh/%E6%AF%8D%E5%AC%B0%E8%82%B2%E5%85%92/%E5%AD%95%E5%A9%A6%E6%B8%85%E6%BD%94%E8%AD%B7%E7%90%86/main/search?q=%3Arelevance%3Astreet%3Amain%3Acategory%3AAA28720000000",
+        "https://www.hktvmall.com/hktv/zh/%E6%AF%8D%E5%AC%B0%E8%82%B2%E5%85%92/%E7%94%A2%E5%89%8D-%E7%94%A2%E5%BE%8C-%E5%B0%88%E5%8D%80/main/search?q=%3Arelevance%3Astreet%3Amain%3Acategory%3AAA28770000000",
+        "https://www.hktvmall.com/hktv/zh/%E6%AF%8D%E5%AC%B0%E8%82%B2%E5%85%92/%E5%AC%B0%E5%85%92%E5%82%A2%E4%BF%B1-%E5%AE%89%E5%85%A8%E7%94%A8%E5%93%81/IP-%E9%8F%A1%E9%A0%AD/main/search?q=%3Arelevance%3Astreet%3Amain%3Acategory%3AAA28575000001"
+    
+
+
+
+]
+
+folder_path = './Users/derricklam/Desktop/JDE7/selenium/csvfile'
+if not os.path.exists(folder_path):
+    os.makedirs(folder_path)
+
+for i, url in enumerate(urls):
+    driver.get(url)
+    target_number = 1000
+    product_info_list = []
+
+    while len(product_info_list) < target_number:
+        elements = driver.find_elements(By.XPATH, '//div[@class="product-brief"]')
+
+        for product in elements:
+            if len(product_info_list) >= target_number:
+                break
+
+            product_info = {}
+
+            try:
+                product_info['name'] = product.find_element(By.XPATH, './/div[@class="brand-product-name"]').text
+            except NoSuchElementException:
+                product_info['name'] = 'NA'
+
+            try:
+                product_info['sold'] = product.find_element(By.XPATH, './/div[@class="salesNumber-container"]').text
+            except NoSuchElementException:
+                product_info['sold'] = 'NA'
+
+            try:
+                product_info['original_price'] = product.find_element(By.XPATH, './/div[@class="promotional"]').text
+            except NoSuchElementException:
+                product_info['original_price'] = 'NA'
+
+            try:
+                product_info['promo_price'] = product.find_element(By.XPATH, './/div[@class="price"]').text
+            except NoSuchElementException:
+                product_info['promo_price'] = 'NA'
+
+            try:
+                product_info['store_name'] = product.find_element(By.XPATH, './/a[@class="store-name-label crown"]/span').text
+            except NoSuchElementException:
+                product_info['store_name'] = 'NA'
+
+            try:
+                product_info['url'] = product.find_element(By.CSS_SELECTOR, '.product-brief > a').get_attribute("href")
+            except NoSuchElementException:
+                product_info['url'] = 'NA'
+
+            try:
+                product_info['img'] = product.find_element(By.TAG_NAME, 'img').get_attribute("src")
+            except NoSuchElementException:
+                product_info['img'] = 'NA'
+
+            try:
+                product_info['review'] = product.find_element(By.XPATH, './/span[@class="review-number"]').text
+            except NoSuchElementException:
+                product_info['review'] = 'NA'
+
+            product_info_list.append(product_info)
+
+        if len(product_info_list) < target_number:
+            try:
+                next_page_button = WebDriverWait(driver, 10).until(
+                EC.element_to_be_clickable((By.XPATH, '//a[@class="next-btn"]'))
+            )
+                next_page_button.click()
+            except NoSuchElementException:
+                break
+    
+    for product_info in product_info_list:
+        driver.get(product_info['url'])
+
+        try:
+            place_elements = driver.find_elements(By.XPATH, '//tr[@class="productPackingSpec"]//span')
+            if len(place_elements) > 0:
+                product_info['Place_of_product'] = place_elements[-1].text
+            else:
+                product_info['Place_of_product'] = 'NA'
+        except NoSuchElementException:
+            product_info['Place_of_product'] = 'NA'
+
+        try:
+            packing_elements = driver.find_elements(By.XPATH, '//tr[@class="productPackingSpec"]//td')
+            if len(packing_elements) >= 3:
+                product_info['packing_spec'] = packing_elements[-3].text
+            elif len(packing_elements) > 0:
+                product_info['packing_spec'] = packing_elements[-1].text
+            else:
+                product_info['packing_spec'] = 'NA'
+        except NoSuchElementException:
+            product_info['packing_spec'] = 'NA'
+
+        try:
+            product_info['short_desc'] = driver.find_element(By.XPATH, './/span[@class="short-desc"]').text
+        except NoSuchElementException:
+            product_info['short_desc'] = 'NA'
+
+        try:
+            product_info['rating'] = driver.find_element(By.XPATH, './/label[@class="title-text"]').text
+        except NoSuchElementException:
+            product_info['rating'] = 'NA'
+
+    df = pd.DataFrame(product_info_list)
+
+    df.to_csv(f'{folder_path}/data_{i}.csv', index=False)
+    
+    time.sleep(5)
+
+driver.quit()
