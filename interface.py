@@ -4,11 +4,11 @@ from psycopg2 import Error
 from tkinter import ttk
 
 # 建立與資料庫的連接
-host = "c-jde7silvercluster.azph6jziee3sfh.postgres.cosmos.azure.com"
-dbname = "jde7silverdb"
-user = "citus"
-password = "jde7_silver"
-sslmode = "require"
+host = "****"
+dbname = "****"
+user = "****"
+password = "****"
+sslmode = "****"
 
 def connect_to_database():
     try:
