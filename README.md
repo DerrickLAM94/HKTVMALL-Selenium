@@ -46,6 +46,8 @@ Contributions are welcome! If you would like to contribute to this project, plea
 
 <img width="880" alt="selenium" src="https://github.com/DerrickLAM94/HKTVMALL-Selenium/assets/140989898/f7fc531e-2df2-451d-a690-7e00c7235a89">
 
+-Iterating Through URLs:
+The script then enters a loop to process each URL one by one.
 - Scraping Product Details:
 - The script uses Selenium to find product elements on the current page using XPath selectors.
 For each product, it extracts information such as product name, number of items sold, original price, promotional price, store name, URL, image URL, and review count.
