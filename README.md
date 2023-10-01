@@ -33,3 +33,23 @@ Contributions are welcome! If you would like to contribute to this project, plea
 
 - [Documentation](https://github.com/DerrickLAM94/HKTVMALL-Selenium/blob/main/README.md)
 - [Issue Tracker](https://github.com/DerrickLAM94/HKTVMALL-Selenium/issues)
+
+<img width="605" alt="Library" src="https://github.com/DerrickLAM94/HKTVMALL-Selenium/assets/140989898/e5522ba4-1a3b-4d86-811f-2d6604de8b96">
+- Importing Dependencies:
+The script starts by importing various modules from the Selenium library, as well as other necessary libraries like Pandas, time, and os.
+
+<img width="907" alt="URL Link" src="https://github.com/DerrickLAM94/HKTVMALL-Selenium/assets/140989898/df1444a1-45ee-41e3-9d0a-19509dc07eab">
+- Defining the List of URLs:
+It defines a list called urls containing multiple URLs to different product search pages on the HKTVMall website. Each URL corresponds to a specific category or search criteria.
+
+<img width="880" alt="selenium" src="https://github.com/DerrickLAM94/HKTVMALL-Selenium/assets/140989898/f7fc531e-2df2-451d-a690-7e00c7235a89">
+- Scraping Product Details:
+The script uses Selenium to find product elements on the current page using XPath selectors.
+For each product, it extracts information such as product name, number of items sold, original price, promotional price, store name, URL, image URL, and review count.
+This information is stored in a dictionary called product_info and added to the product_info_list.
+
+<img width="423" alt="Pandas" src="https://github.com/DerrickLAM94/HKTVMALL-Selenium/assets/140989898/436624dc-b2b0-4243-96d3-4b49e83c58c6">
+- Storing Data in CSV:
+For each URL, the script creates a Pandas DataFrame df from the product_info_list and saves it as a CSV file with a unique filename in the specified folder.
+
+
